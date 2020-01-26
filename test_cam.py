@@ -22,10 +22,7 @@ def findGreatesContour(contours):
 def check_contours(frame):
 
     print('Checking image:')
-
-    # These define the upper and lower HSV for the red obstacles
-    # May change on different drones.
-    # Do the contour detection on the input frame
+    
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     mask1 = cv2.inRange(hsv, (0,50,20), (5,255,255))
@@ -78,14 +75,19 @@ def apply_brightness_contrast(input_img, brightness = 255, contrast = 127):
         gamma_c = 127*(1-f)
 
         buf = cv2.addWeighted(buf, alpha_c, buf, 0, gamma_c)
-
-    #cv2.putText(buf,'B:{},C:{}'.format(brightness,contrast),(10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        
     return buf
 
 def map(x, in_min, in_max, out_min, out_max):
     return int((x-in_min) * (out_max-out_min) / (in_max-in_min) + out_min)
 
-# This may open your webcam instead of the CrazyFlie camera! If so, try
+## -----------------------------------------------------------------------------------------
+
+## The following code is the main logic that is executed when this script is run
+
+## -----------------------------------------------------------------------------------------
+
+# This may open the webcam instead of the CrazyFlie camera! If so, try
 # a different small, positive integer, e.g. 1, 2, 3.
 cap = cv2.VideoCapture(0)
 
@@ -94,9 +96,8 @@ while(True):
     ret, frame = cap.read()
 
     img = apply_brightness_contrast(frame, 200, 150)
-    # img = apply_brightness_contrast(frame)
     # Display the resulting frame
-    #cv2.imshow('img', img)
+    cv2.imshow('img', img)
     print(check_contours(frame))
     time.sleep(3)
     # Hit q to quit.
